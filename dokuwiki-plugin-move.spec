@@ -1,12 +1,14 @@
+%define		subver	2015-10-17
+%define		ver		%(echo %{subver} | tr -d -)
 %define		plugin		move
 Summary:	Move pages, media files and namespaces while maintaining the link structure
 Name:		dokuwiki-plugin-%{plugin}
-Version:	20151017
+Version:	%{ver}
 Release:	1
 License:	GPL v2
 Group:		Applications/WWW
-Source0:	https://github.com/michitux/dokuwiki-plugin-move/archive/master/%{plugin}-%{version}.tar.gz
-# Source0-md5:	65d57798bd6059f0c0ab6be5cc0390a6
+Source0:	https://github.com/michitux/dokuwiki-plugin-move/archive/%{subver}/%{plugin}-%{version}.tar.gz
+# Source0-md5:	4583d7081f21c3aa2dbd860557134ecd
 URL:		https://www.dokuwiki.org/plugin:move
 BuildRequires:	sed >= 4.0
 BuildRequires:	unzip
