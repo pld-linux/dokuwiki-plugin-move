@@ -1,12 +1,12 @@
 %define		plugin		move
 Summary:	Move pages, media files and namespaces while maintaining the link structure
 Name:		dokuwiki-plugin-%{plugin}
-Version:	20150516
+Version:	20151017
 Release:	1
 License:	GPL v2
 Group:		Applications/WWW
 Source0:	https://github.com/michitux/dokuwiki-plugin-move/archive/master/%{plugin}-%{version}.tar.gz
-# Source0-md5:	686215f6e0464ef98b9ff31575eaa33b
+# Source0-md5:	65d57798bd6059f0c0ab6be5cc0390a6
 URL:		https://www.dokuwiki.org/plugin:move
 BuildRequires:	sed >= 4.0
 BuildRequires:	unzip
@@ -37,8 +37,6 @@ have any effect anymore after moving that page.
 %prep
 %setup -qc
 mv dokuwiki-plugin-move-*/* .
-rm dokuwiki-plugin-move-*/.gitignore
-rm dokuwiki-plugin-move-*/.travis.yml
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
