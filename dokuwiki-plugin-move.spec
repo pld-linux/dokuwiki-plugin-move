@@ -1,18 +1,22 @@
-%define		subver	2017-01-07
+%define		subver	2022-01-23
 %define		ver		%(echo %{subver} | tr -d -)
 %define		plugin		move
+%define		php_min_version 5.3.0
 Summary:	Move pages, media files and namespaces while maintaining the link structure
 Name:		dokuwiki-plugin-%{plugin}
 Version:	%{ver}
 Release:	1
 License:	GPL v2
 Group:		Applications/WWW
-Source0:	https://github.com/michitux/dokuwiki-plugin-move/archive/06b7ca403829/%{plugin}-%{version}.tar.gz
-# Source0-md5:	b75a0887edf7d627386d27050aa8f867
+Source0:	https://github.com/michitux/dokuwiki-plugin-move/archive/%{subver}/%{plugin}-%{subver}.tar.gz
+# Source0-md5:	b6ac00200df22eb9b76376ef240fb7b7
 URL:		https://www.dokuwiki.org/plugin:move
+BuildRequires:	rpm-php-pearprov >= 4.4.2-11
+BuildRequires:	rpmbuild(find_lang) >= 1.41
+BuildRequires:	rpmbuild(macros) >= 1.745
 BuildRequires:	sed >= 4.0
-BuildRequires:	unzip
 Requires:	dokuwiki >= 20131208
+Requires:	php(core) >= %{php_min_version}
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -38,10 +42,10 @@ have any effect anymore after moving that page.
 
 %prep
 %setup -qc
-mv dokuwiki-plugin-move-*/* .
+mv *-%{plugin}-*/{.??*,*} .
 
-# cleanup backups after patching
-find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
+rm .github/workflows/phpTestLinux.yml
+rm deleted.files
 
 %build
 version=$(awk '/^date/{print $2}' plugin.info.txt)
@@ -58,15 +62,19 @@ cp -a . $RPM_BUILD_ROOT%{plugindir}
 %{__rm} $RPM_BUILD_ROOT%{plugindir}/README
 %{__rm} -r $RPM_BUILD_ROOT%{plugindir}/_test
 
+%find_lang %{name}.lang --with-dokuwiki
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
+%files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc README
 %dir %{plugindir}
 %{plugindir}/*.js
 %{plugindir}/*.less
+%{plugindir}/*.php
+%{plugindir}/*.svg
 %{plugindir}/*.txt
 %{plugindir}/action
 %{plugindir}/admin
@@ -74,21 +82,3 @@ rm -rf $RPM_BUILD_ROOT
 %{plugindir}/helper
 %{plugindir}/images
 %{plugindir}/script
-
-%dir %{plugindir}/lang
-%{plugindir}/lang/en
-%lang(cs) %{plugindir}/lang/cs
-%lang(de) %{plugindir}/lang/de
-%lang(es) %{plugindir}/lang/es
-%lang(fr) %{plugindir}/lang/fr
-%lang(it) %{plugindir}/lang/it
-%lang(ja) %{plugindir}/lang/ja
-%lang(ko) %{plugindir}/lang/ko
-%lang(lv) %{plugindir}/lang/lv
-%lang(nl) %{plugindir}/lang/nl
-%lang(no) %{plugindir}/lang/no
-%lang(pl) %{plugindir}/lang/pl
-%lang(ru) %{plugindir}/lang/ru
-%lang(sl) %{plugindir}/lang/sl
-%lang(sv) %{plugindir}/lang/sv
-%lang(zh_CN) %{plugindir}/lang/zh
